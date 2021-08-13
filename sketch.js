@@ -1,3 +1,5 @@
+
+
 var Ball, database;
 var position;
 
@@ -6,11 +8,12 @@ function setup(){
 
   console.log(database);
   createCanvas(500,500);
-
+  database=firebase.database();
   Ball = createSprite(250,250,10,10);
   Ball.shapeColor = "red";
 
-
+var ballPosition=database.ref("ball/position")
+ballPosition.on("value",readPosition,showError)
 }
 
 function draw(){
@@ -33,12 +36,18 @@ function draw(){
 }
 
 function writePosition(x,y){
- 
+ database.ref("ball/position").set({
+  "x":Ball.x+x,
+  "y":Ball.y+y
+ })
 }
 
 function readPosition(data){
- 
+ position=data.val()
+ Ball.x=position.x;
+ Ball.y=position.y;
 }
 
 function showError(){
+ console.log("error!!")
 }
